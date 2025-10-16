@@ -15,10 +15,10 @@ metadata:
   namespace: default
 type: Opaque
 data:
-  ORDERS_DB_USER: b3JkZXJzdXNlcg== # base64 encoded "ordersuser"
-  ORDERS_DB_PASS: c2VjdXJlcGFzc3dvcmQxMjM= # base64 encoded "securepassword123"
-  CATALOG_DB_USER: Y2F0YWxvZ3VzZXI= # base64 encoded "cataloguser"
-  CATALOG_DB_PASS: c2VjdXJlcGFzc3dvcmQxMjM= # base64 encoded "securepassword123"
+  ORDERS_DB_USER: b3JkZXJzdXNlcg== 
+  ORDERS_DB_PASS: c2VjdXJlcGFzc3dvcmQxMjM=
+  CATALOG_DB_USER: Y2F0YWxvZ3VzZXI=
+  CATALOG_DB_PASS: c2VjdXJlcGFzc3dvcmQxMjM=
 ---
 apiVersion: apps/v1
 kind: Deployment
