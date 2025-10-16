@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: retail-store-config
+  namespace: default
+data:
+  ORDERS_DB_HOST: "bedrock-orders-db.xxxxx.us-west-2.rds.amazonaws.com"
+  CATALOG_DB_HOST: "bedrock-catalog-db.xxxxx.us-west-2.rds.amazonaws.com"
+  DYNAMODB_TABLE: "bedrock-carts"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: retail-store-secrets
+  namespace: default
+type: Opaque
+data:
+  ORDERS_DB_USER: b3JkZXJzdXNlcg== # base64 encoded "ordersuser"
+  ORDERS_DB_PASS: c2VjdXJlcGFzc3dvcmQxMjM= # base64 encoded "securepassword123"
+  CATALOG_DB_USER: Y2F0YWxvZ3VzZXI= # base64 encoded "cataloguser"
+  CATALOG_DB_PASS: c2VjdXJlcGFzc3dvcmQxMjM= # base64 encoded "securepassword123"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: retail-store-ui
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: retail-store-ui
+  template:
+    metadata:
+      labels:
+        app: retail-store-ui
+    spec:
+      containers:
+      - name: ui
+        image: innovatemart/retail-store-ui:latest
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: retail-store-config
+        - secretRef:
+            name: retail-store-secrets
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: retail-store-ui
+  namespace: default
+spec:
+  type: LoadBalancer
+  selector:
+    app: retail-store-ui
+  ports:
+    - port: 80
+      targetPort: 8080
